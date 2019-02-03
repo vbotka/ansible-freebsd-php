@@ -19,6 +19,7 @@
 
          bsd_phpfpm_enable [ {{ bsd_phpfpm_enable }} ]
          bsd_phpfpm_service [ {{ bsd_phpfpm_service }} ]
+         bsd_phpfpm_wait_enable [ {{ bsd_phpfpm_wait_enable }} ]
 
          bsd_php_conf_backup [ {{ bsd_php_conf_backup }} ]
          bsd_php_conf_owner [ {{ bsd_php_conf_owner }} ]
@@ -38,12 +39,14 @@
          bsd_php_conf_ini
          {{ bsd_php_conf_ini | to_nice_yaml }}
 
-         bsd_php_conf_www_file [ {{ bsd_php_conf_www_file }} ]
-         bsd_php_conf_www
-         {{ bsd_php_conf_www | to_nice_yaml }}
+         bsd_php_conf_phpd
+         {{ bsd_php_conf_phpd | to_nice_yaml }}
+
+         bsd_php_conf_fpmd
+         {{ bsd_php_conf_fpmd | to_yaml }}
 
          bsd_php_rcconf
-         {{ bsd_php_rcconf | to_nice_yaml }}
+         {{ bsd_php_rcconf | to_yaml }}
 
   debug:
     msg: "{{ msg.split('\n') }}"

@@ -26,23 +26,24 @@ bsd_php_conf_owner: root
 bsd_php_conf_group: wheel
 bsd_php_conf_mode: 0644
 bsd_php_conf_path: "/usr/local/etc"
-
 bsd_php_conf_file: "{{ bsd_php_conf_path }}/php.conf"
-bsd_php_conf: []
-
+bsd_php_conf:
+  - {key: "PHP_VER", val: "{{ bsd_php_version }}", state: "present"}
 bsd_php_conf_fpm_file: "{{ bsd_php_conf_path }}/php-fpm.conf"
-bsd_php_conf_fpm: []
-
+bsd_php_conf_fpm: []     # same structure as bsd_php_conf
 bsd_php_conf_ini_file: "{{ bsd_php_conf_path }}/php.ini"
-bsd_php_conf_ini: []
-
+bsd_php_conf_ini: []     # same structure as bsd_php_conf
+# dir php-fpm.d
 bsd_php_conf_www_listen_ip: 127.0.0.1
 bsd_php_conf_www_listen_port: 9000
-bsd_php_conf_www_file: "{{ bsd_php_conf_path }}/php-fpm.d/www.conf"
-bsd_php_conf_www:
-  - {key: "listen",
-     val: "{{ bsd_php_conf_www_listen_ip }}{{':'}}{{
-              bsd_php_conf_www_listen_port }}"}
+bsd_php_conf_fpmd:
+  - file: "www.conf"
+    conf:
+      - {key: "listen",
+         val: "{{ bsd_php_conf_www_listen_ip }}{{':'}}{{
+                  bsd_php_conf_www_listen_port }}"}
+# dir php (same structure as bsd_php_conf_fpmd)
+bsd_php_conf_phpd: {}
 
 # rcconf
 bsd_php_rcconf: []

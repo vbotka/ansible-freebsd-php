@@ -2,17 +2,21 @@
 
 - name: "conf: Ownership and permissions"
   file:
-    path: "{{ item }}"
+    state: "{{ item.state }}"
+    path: "{{ item.path }}"
     owner: "{{ bsd_php_conf_owner }}"
     group: "{{ bsd_php_conf_group }}"
     mode: "{{ bsd_php_conf_mode }}"
+    recurse: "{{ item.recurse|default('no') }}"
   loop:
-    - "{{ bsd_php_conf_file }}"
-    - "{{ bsd_php_conf_fpm_file }}"
-    - "{{ bsd_php_conf_ini_file }}"
-    - "{{ bsd_php_conf_www_file }}"
+    - {state: file, path: "{{ bsd_php_conf_file }}"}
+    - {state: file, path: "{{ bsd_php_conf_fpm_file }}"}
+    - {state: file, path: "{{ bsd_php_conf_ini_file }}"}
+#   - {state: directory, path: "{{ bsd_php_conf_path }}/php", recurse: yes}
+#   - {state: directory, path: "{{ bsd_php_conf_path }}/php-fpm.d", recurse: yes}
+# TODO: Apply mode to directories
 
-# php_conf
+# file.conf
 - name: "conf: Configure {{ bsd_php_conf_file }}"
   lineinfile:
     state: "{{ item.state|default('present') }}"
@@ -23,7 +27,7 @@
   loop: "{{ bsd_php_conf }}"
   notify: reload php-fpm
 
-# php_conf_fpm
+# php-fpm.conf
 - name: "conf: Configure {{ bsd_php_conf_fpm_file }}"
   lineinfile:
     state: "{{ item.state|default('present') }}"
@@ -34,7 +38,7 @@
   loop: "{{ bsd_php_conf_fpm }}"
   notify: reload php-fpm
 
-# php_conf_ini
+# php.ini
 - name: "conf: Configure {{ bsd_php_conf_ini_file }}"
   lineinfile:
     state: "{{ item.state|default('present') }}"
@@ -45,15 +49,26 @@
   loop: "{{ bsd_php_conf_ini }}"
   notify: reload php-fpm
 
-# php_conf_www
-- name: "conf: Configure {{ bsd_php_conf_www_file }}"
+# dir php
+- name: "conf: Configure {{ bsd_php_conf_path }}/php/*"
   lineinfile:
     state: "{{ item.state|default('present') }}"
-    dest: "{{ bsd_php_conf_www_file }}"
-    regexp: "^\\s*{{ item.key }}\\s*="
-    line: "{{ item.key }} = {{ item.val }}"
+    dest: "{{ bsd_php_conf_path }}/php/{{ item.0.file }}"
+    regexp: "^\\s*{{ item.1.key }}\\s*="
+    line: "{{ item.1.key }} = {{ item.1.val }}"
     backup: "{{ bsd_php_backup_conf }}"
-  loop: "{{ bsd_php_conf_www }}"
+  loop: "{{ bsd_php_conf_phpd|subelements('conf') }}"
+  notify: reload php-fpm
+
+# dir php-fpm.d
+- name: "conf: Configure {{ bsd_php_conf_path }}/php-fpm.d/*"
+  lineinfile:
+    state: "{{ item.state|default('present') }}"
+    dest: "{{ bsd_php_conf_path }}/php-fpm.d/{{ item.0.file }}"
+    regexp: "^\\s*{{ item.1.key }}\\s*="
+    line: "{{ item.1.key }} = {{ item.1.val }}"
+    backup: "{{ bsd_php_backup_conf }}"
+  loop: "{{ bsd_php_conf_fpmd|subelements('conf') }}"
   notify: reload php-fpm
 
 # EOF
