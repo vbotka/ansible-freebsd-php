@@ -1,0 +1,51 @@
+---
+# defaults freebsd-php
+
+bsd_php_debug: false
+bsd_php_backup_conf: no
+
+# service php-fpm
+bsd_phpfpm_enable: false
+bsd_phpfpm_wait_enable: false
+bsd_phpfpm_service: php-fpm
+
+# install method
+freebsd_install_method: packages
+freebsd_use_packages: "yes"
+freebsd_install_retries: 10
+freebsd_install_delay: 5
+
+# packages
+bsd_php_version: "72"
+bsd_php_packages:
+  - "lang/php{{ bsd_php_version }}"
+bsd_php_packages_extra: []
+
+# conf
+bsd_php_conf_owner: root
+bsd_php_conf_group: wheel
+bsd_php_conf_mode: 0644
+bsd_php_conf_path: "/usr/local/etc"
+
+bsd_php_conf_file: "{{ bsd_php_conf_path }}/php.conf"
+bsd_php_conf: []
+
+bsd_php_conf_fpm_file: "{{ bsd_php_conf_path }}/php-fpm.conf"
+bsd_php_conf_fpm: []
+
+bsd_php_conf_ini_file: "{{ bsd_php_conf_path }}/php.ini"
+bsd_php_conf_ini: []
+
+bsd_php_conf_www_listen_ip: 127.0.0.1
+bsd_php_conf_www_listen_port: 9000
+bsd_php_conf_www_file: "{{ bsd_php_conf_path }}/php-fpm.d/www.conf"
+bsd_php_conf_www:
+  - {key: "listen",
+     val: "{{ bsd_php_conf_www_listen_ip }}{{':'}}{{
+              bsd_php_conf_www_listen_port }}"}
+
+# rcconf
+bsd_php_rcconf: []
+
+# EOF
+...

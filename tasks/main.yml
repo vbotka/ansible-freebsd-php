@@ -1,0 +1,18 @@
+---
+# tasks freebsd-php
+
+- import_tasks: debug.yml
+  when: bsd_php_debug
+  tags: [bsd_php_debug, always]
+
+- import_tasks: packages.yml
+  tags: bsd_php_packages
+
+- import_tasks: conf.yml
+  tags: bsd_php_conf
+
+- import_tasks: rcconf.yml
+  tags: bsd_php_rcconf
+
+# EOF
+...

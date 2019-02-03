@@ -1,0 +1,60 @@
+---
+
+- name: "conf: Ownership and permissions"
+  file:
+    path: "{{ item }}"
+    owner: "{{ bsd_php_conf_owner }}"
+    group: "{{ bsd_php_conf_group }}"
+    mode: "{{ bsd_php_conf_mode }}"
+  loop:
+    - "{{ bsd_php_conf_file }}"
+    - "{{ bsd_php_conf_fpm_file }}"
+    - "{{ bsd_php_conf_ini_file }}"
+    - "{{ bsd_php_conf_www_file }}"
+
+# php_conf
+- name: "conf: Configure {{ bsd_php_conf_file }}"
+  lineinfile:
+    state: "{{ item.state|default('present') }}"
+    dest: "{{ bsd_php_conf_file }}"
+    regexp: "^\\s*{{ item.key }}\\s*="
+    line: "{{ item.key }}={{ item.val }}"
+    backup: "{{ bsd_php_backup_conf }}"
+  loop: "{{ bsd_php_conf }}"
+  notify: reload php-fpm
+
+# php_conf_fpm
+- name: "conf: Configure {{ bsd_php_conf_fpm_file }}"
+  lineinfile:
+    state: "{{ item.state|default('present') }}"
+    dest: "{{ bsd_php_conf_fpm_file }}"
+    regexp: "^\\s*{{ item.key }}\\s*="
+    line: "{{ item.key }} = {{ item.val }}"
+    backup: "{{ bsd_php_backup_conf }}"
+  loop: "{{ bsd_php_conf_fpm }}"
+  notify: reload php-fpm
+
+# php_conf_ini
+- name: "conf: Configure {{ bsd_php_conf_ini_file }}"
+  lineinfile:
+    state: "{{ item.state|default('present') }}"
+    dest: "{{ bsd_php_conf_ini_file }}"
+    regexp: "^\\s*{{ item.key }}\\s*="
+    line: "{{ item.key }} = {{ item.val }}"
+    backup: "{{ bsd_php_backup_conf }}"
+  loop: "{{ bsd_php_conf_ini }}"
+  notify: reload php-fpm
+
+# php_conf_www
+- name: "conf: Configure {{ bsd_php_conf_www_file }}"
+  lineinfile:
+    state: "{{ item.state|default('present') }}"
+    dest: "{{ bsd_php_conf_www_file }}"
+    regexp: "^\\s*{{ item.key }}\\s*="
+    line: "{{ item.key }} = {{ item.val }}"
+    backup: "{{ bsd_php_backup_conf }}"
+  loop: "{{ bsd_php_conf_www }}"
+  notify: reload php-fpm
+
+# EOF
+...

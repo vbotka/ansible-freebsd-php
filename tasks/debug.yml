@@ -1,0 +1,52 @@
+---
+
+- name: "FreeBSD PHP Debug."
+  vars:
+    msg: |
+         ansible_architecture [ {{ ansible_architecture }} ]
+         ansible_os_family [ {{ ansible_os_family }} ]
+         ansible_distribution [ {{ ansible_distribution }} ]
+         ansible_distribution_major_version [ {{ ansible_distribution_major_version }} ]
+         ansible_distribution_version [ {{ ansible_distribution_version }} ]
+         ansible_distribution_release [ {{ ansible_distribution_release }} ]
+
+         freebsd_install_method [ {{ freebsd_install_method }} ]
+         freebsd_use_packages [ {{ freebsd_use_packages | default('absent') }} ]
+         bsd_php_packages
+         {{ bsd_php_packages | to_nice_yaml }}
+         bsd_php_packages_extra
+         {{ bsd_php_packages_extra | to_nice_yaml }}
+
+         bsd_phpfpm_enable [ {{ bsd_phpfpm_enable }} ]
+         bsd_phpfpm_service [ {{ bsd_phpfpm_service }} ]
+
+         bsd_php_conf_backup [ {{ bsd_php_conf_backup }} ]
+         bsd_php_conf_owner [ {{ bsd_php_conf_owner }} ]
+         bsd_php_conf_group [ {{ bsd_php_conf_group }} ]
+         bsd_php_conf_mode [ {{ bsd_php_conf_mode }} ]
+         bsd_php_conf_path [ {{ bsd_php_conf_path }} ]
+
+         bsd_php_conf_file [ {{ bsd_php_conf_file }} ]
+         bsd_php_conf
+         {{ bsd_php_conf | to_nice_yaml }}
+
+         bsd_php_conf_fpm_file [ {{ bsd_php_conf_fpm_file }} ]
+         bsd_php_conf_fpm
+         {{ bsd_php_conf_fpm | to_nice_yaml }}
+
+         bsd_php_conf_ini_file [ {{ bsd_php_conf_ini_file }} ]
+         bsd_php_conf_ini
+         {{ bsd_php_conf_ini | to_nice_yaml }}
+
+         bsd_php_conf_www_file [ {{ bsd_php_conf_www_file }} ]
+         bsd_php_conf_www
+         {{ bsd_php_conf_www | to_nice_yaml }}
+
+         bsd_php_rcconf
+         {{ bsd_php_rcconf | to_nice_yaml }}
+
+  debug:
+    msg: "{{ msg.split('\n') }}"
+
+# EOF
+...

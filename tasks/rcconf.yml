@@ -1,0 +1,41 @@
+---
+
+- name: "rcconf: Enable and start {{ bsd_phpfpm_service }}"
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^\\s*php_fpm_enable"
+    line: "php_fpm_enable=\"YES\""
+    backup: "{{ bsd_php_conf_backup }}"
+  notify: "enable and start php-fpm"
+  when: bsd_phpfpm_enable
+
+- name: "rcconf: Disable and stop {{ bsd_phpfpm_service }}"
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^\\s*php_fpm_enable"
+    line: "php_fpm_enable=\"NO\""
+    backup: "{{ bsd_php_conf_backup }}"
+  notify: "disable and stop php-fpm"
+  when: not bsd_phpfpm_enable
+
+- name: "rcconf: Configure php_fpm_* in /etc/rc.conf"
+  lineinfile:
+    state: "{{ item.state|default('present') }}"
+    dest: "/etc/rc.conf"
+    regexp: "^\\s*{{ item.key }}\\s*="
+    line: "{{ item.key }}=\"{{ item.val }}\""
+    backup: "{{ bsd_php_backup_conf }}"
+  loop: "{{ bsd_php_rcconf }}"
+  notify: reload php-fpm
+
+- meta: flush_handlers
+
+- name: "rcconf: Wait for port {{ bsd_php_conf_www_listen_port }}"
+  wait_for:
+    port: "{{ bsd_php_conf_www_listen_port }}"
+  when:
+    - bsd_phpfpm_enable
+    - bsd_phpfpm_wait_enable
+
+# EOF
+...
