@@ -16,7 +16,7 @@
 #   - {state: directory, path: "{{ bsd_php_conf_path }}/php-fpm.d", recurse: yes}
 # TODO: Apply mode to directories
 
-# file.conf
+# php.conf
 - name: "conf: Configure {{ bsd_php_conf_file }}"
   lineinfile:
     state: "{{ item.state|default('present') }}"
