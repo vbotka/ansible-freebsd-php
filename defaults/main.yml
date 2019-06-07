@@ -16,7 +16,7 @@ freebsd_install_retries: 10
 freebsd_install_delay: 5
 
 # packages
-bsd_php_version: "72"
+bsd_php_version: "71"
 bsd_php_packages:
   - "lang/php{{ bsd_php_version }}"
 bsd_php_packages_extra: []
