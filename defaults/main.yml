@@ -2,7 +2,7 @@
 # defaults freebsd-php
 
 bsd_php_debug: false
-bsd_php_backup_conf: no
+bsd_php_backup_conf: false
 
 # service php-fpm
 bsd_phpfpm_enable: false
@@ -11,12 +11,12 @@ bsd_phpfpm_service: php-fpm
 
 # install method
 freebsd_install_method: packages
-freebsd_use_packages: "yes"
+freebsd_use_packages: true
 freebsd_install_retries: 10
 freebsd_install_delay: 5
 
 # packages
-bsd_php_version: "71"
+bsd_php_version: "72"
 bsd_php_packages:
   - "lang/php{{ bsd_php_version }}"
 bsd_php_packages_extra: []
@@ -24,8 +24,8 @@ bsd_php_packages_extra: []
 # conf
 bsd_php_conf_owner: root
 bsd_php_conf_group: wheel
-bsd_php_conf_mode: 0644
-bsd_php_conf_path: "/usr/local/etc"
+bsd_php_conf_mode: "0644"
+bsd_php_conf_path: /usr/local/etc
 bsd_php_conf_file: "{{ bsd_php_conf_path }}/php.conf"
 bsd_php_conf:
   - {key: "PHP_VER", val: "{{ bsd_php_version }}", state: "present"}
