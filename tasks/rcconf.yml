@@ -7,7 +7,7 @@
     line: "php_fpm_enable=\"YES\""
     backup: "{{ bsd_php_conf_backup }}"
   notify: "enable and start php-fpm"
-  when: bsd_phpfpm_enable
+  when: bsd_phpfpm_enable|bool
 
 - name: "rcconf: Disable and stop {{ bsd_phpfpm_service }}"
   lineinfile:
@@ -16,7 +16,7 @@
     line: "php_fpm_enable=\"NO\""
     backup: "{{ bsd_php_conf_backup }}"
   notify: "disable and stop php-fpm"
-  when: not bsd_phpfpm_enable
+  when: not bsd_phpfpm_enable|bool
 
 - name: "rcconf: Configure php_fpm_* in /etc/rc.conf"
   lineinfile:
@@ -34,8 +34,8 @@
   wait_for:
     port: "{{ bsd_php_conf_www_listen_port }}"
   when:
-    - bsd_phpfpm_enable
-    - bsd_phpfpm_wait_enable
+    - bsd_phpfpm_enable|bool
+    - bsd_phpfpm_wait_enable|bool
 
 # EOF
 ...

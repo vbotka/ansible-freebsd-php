@@ -28,7 +28,7 @@
   notify: reload php-fpm
 
 - name: "conf: Set my_php_version"
-  shell: "php -v | head -1 | cut -d ' ' -f 2"
+  shell: "php -v | head -1 | cut -d ' ' -f 2"  # noqa 306
   register: my_php_version
   changed_when: false
 

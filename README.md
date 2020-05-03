@@ -4,41 +4,43 @@
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_php/) FreeBSD. Install and configure PHP.
 
+Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-php/issues). Contributions are welcome.
+
 
 # Requirements
 
-No requiremenst.
+None.
 
 
-# Variables
+# Roles Variables
 
-TBD. Review defaults and examples in vars.
+Review defaults and examples in vars.
 
 
 # Workflow
 
-1) Change shell to /bin/sh.
+1) Change shell to /bin/sh
 
 ```
-# ansible dbserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
+shell> ansible dbserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
-2) Install role.
+2) Install role
 
 ```
-# ansible-galaxy install vbotka.freebsd_php
+shell> ansible-galaxy install vbotka.freebsd_php
 ```
 
-3) Fit variables.
+3) Fit variables
 
 ```
-# editor vbotka.freebsd_php/vars/main.yml
+shell> editor vbotka.freebsd_php/vars/main.yml
 ```
 
-4) Create playbook and inventory.
+4) Create playbook and inventory
 
 ```
-# cat php.yml
+shell> cat php.yml
 
 - hosts: webserver
   roles:
@@ -46,7 +48,7 @@ TBD. Review defaults and examples in vars.
 ```
 
 ```
-# cat hosts
+shell> cat hosts
 [webserver]
 <SERVER1-IP-OR-FQDN>
 <SERVER2-IP-OR-FQDN>
@@ -57,10 +59,10 @@ ansible_python_interpreter=/usr/local/bin/python3.7
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
-5) Install and configure PHP.
+5) Install and configure PHP
 
 ```
-# ansible-playbook php.yml
+shell> ansible-playbook php.yml
 ```
 		
 

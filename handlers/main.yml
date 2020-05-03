@@ -27,13 +27,13 @@
   service:
     name: "{{ bsd_phpfpm_service }}"
     state: restarted
-  when: bsd_phpfpm_enable
+  when: bsd_phpfpm_enable|bool
 
 - name: reload php-fpm
   service:
     name: "{{ bsd_phpfpm_service }}"
     state: reloaded
-  when: bsd_phpfpm_enable
+  when: bsd_phpfpm_enable|bool
 
 # EOF
 ...
