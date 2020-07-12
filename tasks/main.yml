@@ -2,7 +2,7 @@
 # tasks freebsd-php
 
 - import_tasks: debug.yml
-  when: bsd_php_debug
+  when: bsd_php_debug|bool
   tags: [bsd_php_debug, always]
 
 - import_tasks: packages.yml

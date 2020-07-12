@@ -7,13 +7,13 @@
     owner: "{{ bsd_php_conf_owner }}"
     group: "{{ bsd_php_conf_group }}"
     mode: "{{ bsd_php_conf_mode }}"
-    recurse: "{{ item.recurse|default('no') }}"
+    recurse: "{{ item.recurse|default('false') }}"
   loop:
     - {state: file, path: "{{ bsd_php_conf_file }}"}
     - {state: file, path: "{{ bsd_php_conf_fpm_file }}"}
     - {state: file, path: "{{ bsd_php_conf_ini_file }}"}
-#   - {state: directory, path: "{{ bsd_php_conf_path }}/php", recurse: yes}
-#   - {state: directory, path: "{{ bsd_php_conf_path }}/php-fpm.d", recurse: yes}
+#   - {state: directory, path: "{{ bsd_php_conf_path }}/php", recurse: true}
+#   - {state: directory, path: "{{ bsd_php_conf_path }}/php-fpm.d", recurse: true}
 # TODO: Apply mode to directories
 
 # php.conf
@@ -21,7 +21,7 @@
   lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_file }}"
-    regexp: "^\\s*{{ item.key }}\\s*="
+    regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: "{{ item.key }}={{ item.val }}"
     backup: "{{ bsd_php_backup_conf }}"
   loop: "{{ bsd_php_conf }}"
@@ -35,18 +35,18 @@
 - name: "conf: Configure PHP_VERSION in {{ bsd_php_conf_file }}"
   lineinfile:
     dest: "{{ bsd_php_conf_file }}"
-    regexp: "^\\s*PHP_VERSION\\s*="
+    regexp: '^\s*PHP_VERSION\s*=(.*)$'
     line: "PHP_VERSION={{ my_php_version.stdout }}"
     backup: "{{ bsd_php_backup_conf }}"
-  when: my_php_version.stdout is defined
   notify: reload php-fpm
+  when: my_php_version.stdout is defined
 
 # php-fpm.conf
 - name: "conf: Configure {{ bsd_php_conf_fpm_file }}"
   lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_fpm_file }}"
-    regexp: "^\\s*{{ item.key }}\\s*="
+    regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: "{{ item.key }} = {{ item.val }}"
     backup: "{{ bsd_php_backup_conf }}"
   loop: "{{ bsd_php_conf_fpm }}"
@@ -57,7 +57,7 @@
   lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_ini_file }}"
-    regexp: "^\\s*{{ item.key }}\\s*="
+    regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: "{{ item.key }} = {{ item.val }}"
     backup: "{{ bsd_php_backup_conf }}"
   loop: "{{ bsd_php_conf_ini }}"
@@ -68,10 +68,10 @@
   lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_path }}/php/{{ item.0.file }}"
-    regexp: "^\\s*{{ item.1.key }}\\s*="
+    regexp: '^\s*{{ item.1.key }}\s*='
     line: "{{ item.1.key }} = {{ item.1.val }}"
     backup: "{{ bsd_php_backup_conf }}"
-  loop: "{{ bsd_php_conf_phpd|subelements('conf') }}"
+  loop: "{{ lookup('subelements', bsd_php_conf_phpd, 'conf') }}"
   notify: reload php-fpm
 
 # dir php-fpm.d
@@ -79,10 +79,10 @@
   lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_path }}/php-fpm.d/{{ item.0.file }}"
-    regexp: "^\\s*{{ item.1.key }}\\s*="
+    regexp: '^\s*{{ item.1.key }}\s*=(.*)$'
     line: "{{ item.1.key }} = {{ item.1.val }}"
     backup: "{{ bsd_php_backup_conf }}"
-  loop: "{{ bsd_php_conf_fpmd|subelements('conf') }}"
+  loop: "{{ lookup('subelements', bsd_php_conf_fpmd, 'conf') }}"
   notify: reload php-fpm
 
 # EOF

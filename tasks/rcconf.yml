@@ -2,28 +2,28 @@
 
 - name: "rcconf: Enable and start {{ bsd_phpfpm_service }}"
   lineinfile:
-    dest: "/etc/rc.conf"
-    regexp: "^\\s*php_fpm_enable"
-    line: "php_fpm_enable=\"YES\""
+    dest: /etc/rc.conf
+    regexp: '^\s*php_fpm_enable(.*)$'
+    line: 'php_fpm_enable="YES"'
     backup: "{{ bsd_php_conf_backup }}"
-  notify: "enable and start php-fpm"
+  notify: enable and start php-fpm
   when: bsd_phpfpm_enable|bool
 
 - name: "rcconf: Disable and stop {{ bsd_phpfpm_service }}"
   lineinfile:
-    dest: "/etc/rc.conf"
-    regexp: "^\\s*php_fpm_enable"
-    line: "php_fpm_enable=\"NO\""
+    dest: /etc/rc.conf
+    regexp: '^\s*php_fpm_enable(.*)$'
+    line: 'php_fpm_enable="NO"'
     backup: "{{ bsd_php_conf_backup }}"
-  notify: "disable and stop php-fpm"
+  notify: disable and stop php-fpm
   when: not bsd_phpfpm_enable|bool
 
 - name: "rcconf: Configure php_fpm_* in /etc/rc.conf"
   lineinfile:
     state: "{{ item.state|default('present') }}"
-    dest: "/etc/rc.conf"
-    regexp: "^\\s*{{ item.key }}\\s*="
-    line: "{{ item.key }}=\"{{ item.val }}\""
+    dest: /etc/rc.conf
+    regexp: '^\s*{{ item.key }}\s*=(.*)$'
+    line: '{{ item.key }}="{{ item.val }}"'
     backup: "{{ bsd_php_backup_conf }}"
   loop: "{{ bsd_php_rcconf }}"
   notify: reload php-fpm
