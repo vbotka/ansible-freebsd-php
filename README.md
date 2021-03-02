@@ -1,23 +1,25 @@
-## freebsd_php
+# freebsd_php
 
-[![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-php.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-php)
+[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_php)[![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-php.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-php)
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_php/) FreeBSD. Install and configure PHP.
 
-Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-php/issues). Contributions are welcome.
+Feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-php/issues).
+
+[Contributions are welcome](https://github.com/firstcontributions/first-contributions).
 
 
-# Requirements
+## Requirements
 
 None.
 
 
-# Roles Variables
+## Roles Variables
 
 Review defaults and examples in vars.
 
 
-# Workflow
+## Workflow
 
 1) Change shell to /bin/sh
 
@@ -66,18 +68,18 @@ shell> ansible-playbook php.yml
 ```
 		
 
-# References
+## References
 
 - [FreebSD handbook: 6.16.3. PHP](https://www.freebsd.org/doc/en/books/porters-handbook/using-php.html)
 - [FreeBSD install PHP 7.2 with FPM for Nginx](https://www.cyberciti.biz/faq/freebsd-install-php-7-2-with-fpm-for-nginx/)
 - [PHP-FPM - A simple and robust FastCGI Process Manager for PHP](https://php-fpm.org/)
 
 
-# License
+## License
 
 [![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
 
 
-# Author Information
+## Author Information
 
 [Vladimir Botka](https://botka.link)
