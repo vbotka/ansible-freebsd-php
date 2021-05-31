@@ -11,7 +11,9 @@ Feel free to [share your feedback and report issues](https://github.com/vbotka/a
 
 ## Requirements
 
-None.
+### Collections
+
+* community.general
 
 
 ## Roles Variables
@@ -27,13 +29,14 @@ Review defaults and examples in vars.
 shell> ansible dbserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
-2) Install role
+2) Install the role and collections
 
 ```
-shell> ansible-galaxy install vbotka.freebsd_php
+shell> ansible-galaxy role install vbotka.freebsd_php
+shell> ansible-galaxy collection install community.general
 ```
 
-3) Fit variables
+3) Fit variables, e.g. in vars/main.yml
 
 ```
 shell> editor vbotka.freebsd_php/vars/main.yml

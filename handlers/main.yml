@@ -1,5 +1,5 @@
 ---
-# handlers freebsd-php
+# handlers freebsd_php
 
 - name: enable and start php-fpm
   service:

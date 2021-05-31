@@ -1,8 +1,8 @@
 ---
-# defaults freebsd-php
+# defaults freebsd_php
 
 bsd_php_debug: false
-bsd_php_backup_conf: false
+bsd_php_backup: false
 
 # service php-fpm
 bsd_phpfpm_enable: false
@@ -16,7 +16,7 @@ freebsd_install_retries: 10
 freebsd_install_delay: 5
 
 # packages
-bsd_php_version: "72"
+bsd_php_version: "74"
 bsd_php_packages:
   - "lang/php{{ bsd_php_version }}"
 bsd_php_packages_extra: []
@@ -28,7 +28,9 @@ bsd_php_conf_mode: "0644"
 bsd_php_conf_path: /usr/local/etc
 bsd_php_conf_file: "{{ bsd_php_conf_path }}/php.conf"
 bsd_php_conf:
-  - {key: "PHP_VER", val: "{{ bsd_php_version }}", state: "present"}
+  - key: PHP_VER
+    val: "{{ bsd_php_version }}"
+    state: present
 bsd_php_conf_fpm_file: "{{ bsd_php_conf_path }}/php-fpm.conf"
 bsd_php_conf_fpm: []     # same structure as bsd_php_conf
 bsd_php_conf_ini_file: "{{ bsd_php_conf_path }}/php.ini"
@@ -37,11 +39,10 @@ bsd_php_conf_ini: []     # same structure as bsd_php_conf
 bsd_php_conf_www_listen_ip: 127.0.0.1
 bsd_php_conf_www_listen_port: 9000
 bsd_php_conf_fpmd:
-  - file: "www.conf"
+  - file: www.conf
     conf:
-      - {key: "listen",
-         val: "{{ bsd_php_conf_www_listen_ip }}{{':'}}{{
-                  bsd_php_conf_www_listen_port }}"}
+      - key: listen
+        val: "{{ bsd_php_conf_www_listen_ip }}:{{ bsd_php_conf_www_listen_port }}"
 # dir php (same structure as bsd_php_conf_fpmd)
 bsd_php_conf_phpd: {}
 
