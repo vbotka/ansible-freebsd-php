@@ -1,7 +1,7 @@
 ---
 
 - name: "conf: Ownership and permissions"
-  file:
+  ansible.builtin.file:
     state: "{{ item.state }}"
     path: "{{ item.path }}"
     owner: "{{ bsd_php_conf_owner }}"
@@ -18,71 +18,74 @@
 
 # php.conf
 - name: "conf: Configure {{ bsd_php_conf_file }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_file }}"
     regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: "{{ item.key }}={{ item.val }}"
-    backup: "{{ bsd_php_backup_conf }}"
+    backup: "{{ bsd_php_backup }}"
   loop: "{{ bsd_php_conf }}"
   notify: reload php-fpm
 
+# noqa 306
 - name: "conf: Set my_php_version"
-  shell: "php -v | head -1 | cut -d ' ' -f 2"  # noqa 306
+  shell:
+    cmd: >
+      php -v | head -1 | cut -d ' ' -f 2
   register: my_php_version
   changed_when: false
 
 - name: "conf: Configure PHP_VERSION in {{ bsd_php_conf_file }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ bsd_php_conf_file }}"
     regexp: '^\s*PHP_VERSION\s*=(.*)$'
     line: "PHP_VERSION={{ my_php_version.stdout }}"
-    backup: "{{ bsd_php_backup_conf }}"
+    backup: "{{ bsd_php_backup }}"
   notify: reload php-fpm
   when: my_php_version.stdout is defined
 
 # php-fpm.conf
 - name: "conf: Configure {{ bsd_php_conf_fpm_file }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_fpm_file }}"
     regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: "{{ item.key }} = {{ item.val }}"
-    backup: "{{ bsd_php_backup_conf }}"
+    backup: "{{ bsd_php_backup }}"
   loop: "{{ bsd_php_conf_fpm }}"
   notify: reload php-fpm
 
 # php.ini
 - name: "conf: Configure {{ bsd_php_conf_ini_file }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_ini_file }}"
     regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: "{{ item.key }} = {{ item.val }}"
-    backup: "{{ bsd_php_backup_conf }}"
+    backup: "{{ bsd_php_backup }}"
   loop: "{{ bsd_php_conf_ini }}"
   notify: reload php-fpm
 
 # dir php
 - name: "conf: Configure {{ bsd_php_conf_path }}/php/*"
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_path }}/php/{{ item.0.file }}"
     regexp: '^\s*{{ item.1.key }}\s*='
     line: "{{ item.1.key }} = {{ item.1.val }}"
-    backup: "{{ bsd_php_backup_conf }}"
-  loop: "{{ lookup('subelements', bsd_php_conf_phpd, 'conf') }}"
+    backup: "{{ bsd_php_backup }}"
+  loop: "{{ query('subelements', bsd_php_conf_phpd, 'conf') }}"
   notify: reload php-fpm
 
 # dir php-fpm.d
 - name: "conf: Configure {{ bsd_php_conf_path }}/php-fpm.d/*"
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: "{{ bsd_php_conf_path }}/php-fpm.d/{{ item.0.file }}"
     regexp: '^\s*{{ item.1.key }}\s*=(.*)$'
     line: "{{ item.1.key }} = {{ item.1.val }}"
-    backup: "{{ bsd_php_backup_conf }}"
-  loop: "{{ lookup('subelements', bsd_php_conf_fpmd, 'conf') }}"
+    backup: "{{ bsd_php_backup }}"
+  loop: "{{ query('subelements', bsd_php_conf_fpmd, 'conf') }}"
   notify: reload php-fpm
 
 # EOF

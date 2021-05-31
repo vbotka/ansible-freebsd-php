@@ -1,5 +1,5 @@
 ---
-# tasks freebsd-php
+# tasks freebsd_php
 
 - import_tasks: debug.yml
   when: bsd_php_debug|bool

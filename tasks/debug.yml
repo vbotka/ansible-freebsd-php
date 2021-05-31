@@ -2,7 +2,7 @@
 
 - name: "PHP Debug"
   vars:
-    msg: |
+    msg: |-
          ansible_architecture [{{ ansible_architecture }}]
          ansible_os_family [{{ ansible_os_family }}]
          ansible_distribution [{{ ansible_distribution }}]
@@ -17,17 +17,16 @@
          {{ bsd_php_packages|to_nice_yaml }}
          bsd_php_packages_extra
          {{ bsd_php_packages_extra|to_nice_yaml }}
+         bsd_php_backup [{{ bsd_php_backup }}]
 
          bsd_phpfpm_enable [{{ bsd_phpfpm_enable }}]
          bsd_phpfpm_service [{{ bsd_phpfpm_service }}]
          bsd_phpfpm_wait_enable [{{ bsd_phpfpm_wait_enable }}]
 
-         bsd_php_conf_backup [{{ bsd_php_conf_backup }}]
          bsd_php_conf_owner [{{ bsd_php_conf_owner }}]
          bsd_php_conf_group [{{ bsd_php_conf_group }}]
          bsd_php_conf_mode [{{ bsd_php_conf_mode }}]
          bsd_php_conf_path [{{ bsd_php_conf_path }}]
-
          bsd_php_conf_file [{{ bsd_php_conf_file }}]
          bsd_php_conf
          {{ bsd_php_conf|to_nice_yaml }}
@@ -49,8 +48,8 @@
          bsd_php_rcconf
          {{ bsd_php_rcconf|to_yaml }}
 
-  debug:
-    msg: "{{ msg.split('\n')[:-1] }}"
+  ansible.builtin.debug:
+    msg: "{{ msg.split('\n') }}"
 
 # EOF
 ...

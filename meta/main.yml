@@ -16,4 +16,6 @@ galaxy_info:
     - freebsd
     - php
 dependencies: []
+collections:
+  - community.general
 ...

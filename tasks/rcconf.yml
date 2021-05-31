@@ -1,37 +1,37 @@
 ---
 
 - name: "rcconf: Enable and start {{ bsd_phpfpm_service }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    regexp: '^\s*php_fpm_enable(.*)$'
+    regexp: '^\s*php_fpm_enable\s*=(.*)$'
     line: 'php_fpm_enable="YES"'
-    backup: "{{ bsd_php_conf_backup }}"
+    backup: "{{ bsd_php_backup }}"
   notify: enable and start php-fpm
   when: bsd_phpfpm_enable|bool
 
 - name: "rcconf: Disable and stop {{ bsd_phpfpm_service }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    regexp: '^\s*php_fpm_enable(.*)$'
+    regexp: '^\s*php_fpm_enable\s*=(.*)$'
     line: 'php_fpm_enable="NO"'
-    backup: "{{ bsd_php_conf_backup }}"
+    backup: "{{ bsd_php_backup }}"
   notify: disable and stop php-fpm
   when: not bsd_phpfpm_enable|bool
 
 - name: "rcconf: Configure php_fpm_* in /etc/rc.conf"
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: "{{ item.state|default('present') }}"
     dest: /etc/rc.conf
     regexp: '^\s*{{ item.key }}\s*=(.*)$'
     line: '{{ item.key }}="{{ item.val }}"'
-    backup: "{{ bsd_php_backup_conf }}"
+    backup: "{{ bsd_php_backup }}"
   loop: "{{ bsd_php_rcconf }}"
   notify: reload php-fpm
 
 - meta: flush_handlers
 
 - name: "rcconf: Wait for port {{ bsd_php_conf_www_listen_port }}"
-  wait_for:
+  ansible.builtin.wait_for:
     port: "{{ bsd_php_conf_www_listen_port }}"
   when:
     - bsd_phpfpm_enable|bool
