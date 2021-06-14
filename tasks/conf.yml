@@ -27,9 +27,8 @@
   loop: "{{ bsd_php_conf }}"
   notify: reload php-fpm
 
-# noqa 306
 - name: "conf: Set my_php_version"
-  shell:
+  ansible.builtin.shell:
     cmd: >
       php -v | head -1 | cut -d ' ' -f 2
   register: my_php_version
