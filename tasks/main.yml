@@ -1,17 +1,21 @@
 ---
 # tasks freebsd_php
 
-- import_tasks: debug.yml
+- name: Import debug.yml
+  ansible.builtin.import_tasks: debug.yml
   when: bsd_php_debug|bool
   tags: [bsd_php_debug, always]
 
-- import_tasks: packages.yml
+- name: Import packages.yml
+  ansible.builtin.import_tasks: packages.yml
   tags: bsd_php_packages
 
-- import_tasks: conf.yml
+- name: Import conf.yml
+  ansible.builtin.import_tasks: conf.yml
   tags: bsd_php_conf
 
-- import_tasks: rcconf.yml
+- name: Import rcconf.yml
+  ansible.builtin.import_tasks: rcconf.yml
   tags: bsd_php_rcconf
 
 # EOF

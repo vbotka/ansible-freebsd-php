@@ -28,7 +28,8 @@
   loop: "{{ bsd_php_rcconf }}"
   notify: reload php-fpm
 
-- meta: flush_handlers
+- name: Meta flush_handlers
+  meta: flush_handlers
 
 - name: "rcconf: Wait for port {{ bsd_php_conf_www_listen_port }}"
   ansible.builtin.wait_for:
