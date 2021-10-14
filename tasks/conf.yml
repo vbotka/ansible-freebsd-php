@@ -41,7 +41,7 @@
     line: "PHP_VERSION={{ my_php_version.stdout }}"
     backup: "{{ bsd_php_backup }}"
   notify: reload php-fpm
-  when: my_php_version.stdout is defined
+  when: my_php_version.stdout|default('')|length > 0
 
 # php-fpm.conf
 - name: "conf: Configure {{ bsd_php_conf_fpm_file }}"

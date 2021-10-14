@@ -4,7 +4,7 @@
 - name: Import debug.yml
   ansible.builtin.import_tasks: debug.yml
   when: bsd_php_debug|bool
-  tags: [bsd_php_debug, always]
+  tags: bsd_php_debug
 
 - name: Import packages.yml
   ansible.builtin.import_tasks: packages.yml
