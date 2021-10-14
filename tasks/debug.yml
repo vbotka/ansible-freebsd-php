@@ -1,6 +1,6 @@
 ---
 
-- name: "PHP Debug"
+- name: PHP Debug
   vars:
     msg: |-
          ansible_architecture [{{ ansible_architecture }}]
@@ -49,7 +49,7 @@
          {{ bsd_php_rcconf|to_yaml }}
 
   ansible.builtin.debug:
-    msg: "{{ msg.split('\n') }}"
+    msg: "{{ '{}'.format(msg) }}"
 
 # EOF
 ...
