@@ -1,6 +1,8 @@
 ---
 # defaults freebsd_php
+bsd_php_role_version: 2.6.0
 
+bsd_php_pkg_install: false
 bsd_php_debug: false
 bsd_php_backup: false
 
@@ -16,12 +18,12 @@ freebsd_install_retries: 10
 freebsd_install_delay: 5
 
 # packages
-bsd_php_version: "74"
+bsd_php_version: "83"
 bsd_php_packages:
-  - "lang/php{{ bsd_php_version }}"
+  - lang/php{{ bsd_php_version }}
 bsd_php_packages_extra: []
 
-# conf
+# php.conf
 bsd_php_conf_owner: root
 bsd_php_conf_group: wheel
 bsd_php_conf_mode: "0644"
@@ -32,17 +34,30 @@ bsd_php_conf:
     val: "{{ bsd_php_version }}"
     state: present
 bsd_php_conf_fpm_file: "{{ bsd_php_conf_path }}/php-fpm.conf"
-bsd_php_conf_fpm: []     # same structure as bsd_php_conf
+bsd_php_conf_fpm: [] # same structure as bsd_php_conf
+
+# php.ini
+bsd_php_conf_ini_sample: "{{ bsd_php_conf_path }}/php.ini-production"
 bsd_php_conf_ini_file: "{{ bsd_php_conf_path }}/php.ini"
-bsd_php_conf_ini: []     # same structure as bsd_php_conf
+bsd_php_conf_ini: [] # same structure as bsd_php_conf
+
 # dir php-fpm.d
 bsd_php_conf_www_listen_ip: 127.0.0.1
 bsd_php_conf_www_listen_port: 9000
+bsd_php_conf_www_listen_url: "{{ bsd_php_conf_www_listen_ip }}:{{ bsd_php_conf_www_listen_port }}"
+bsd_php_conf_www_listen_sock: "/var/run/php{{ bsd_php_version }}-fpm.sock"
+# By default listen on port(url). Optionally listen on socket.
+bsd_php_conf_www_listen: "{{ bsd_php_conf_www_listen_url }}"
+
 bsd_php_conf_fpmd:
   - file: www.conf
     conf:
       - key: listen
-        val: "{{ bsd_php_conf_www_listen_ip }}:{{ bsd_php_conf_www_listen_port }}"
+        val: "{{ bsd_php_conf_www_listen }}"
+      - {key: listen.owner, val: www}
+      - {key: listen.group, val: www}
+      - {key: listen.mode, val: "0660"}
+
 # dir php (same structure as bsd_php_conf_fpmd)
 bsd_php_conf_phpd: {}
 
@@ -50,4 +65,3 @@ bsd_php_conf_phpd: {}
 bsd_php_rcconf: []
 
 # EOF
-...

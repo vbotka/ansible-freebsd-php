@@ -1,14 +1,19 @@
 ---
 # tasks freebsd_php
 
+- name: Import facts.yml
+  ansible.builtin.import_tasks: facts.yml
+  tags: [bsd_php_facts, always]
+
 - name: Import debug.yml
   ansible.builtin.import_tasks: debug.yml
-  when: bsd_php_debug|bool
+  when: bsd_php_debug | bool
   tags: bsd_php_debug
 
-- name: Import packages.yml
-  ansible.builtin.import_tasks: packages.yml
-  tags: bsd_php_packages
+- name: Import pkg.yml
+  ansible.builtin.import_tasks: pkg.yml
+  when: bsd_php_pkg_install | bool
+  tags: bsd_php_pkg
 
 - name: Import conf.yml
   ansible.builtin.import_tasks: conf.yml
@@ -19,4 +24,3 @@
   tags: bsd_php_rcconf
 
 # EOF
-...

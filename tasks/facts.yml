@@ -1,0 +1,23 @@
+---
+- name: "Facts: Create /usr/local/etc/ansible/facts.d"
+  ansible.builtin.file:
+    state: directory
+    path: /usr/local/etc/ansible/facts.d
+    owner: root
+    group: wheel
+    mode: "0755"
+
+- name: "Facts: Create /usr/local/etc/ansible/facts.d/php.fact"
+  ansible.builtin.copy:
+    src: php.fact
+    dest: /usr/local/etc/ansible/facts.d/php.fact
+    owner: root
+    group: wheel
+    mode: "0755"
+
+- name: "Facts: Re-read facts after adding custom fact"
+  ansible.builtin.setup:
+    fact_path: /usr/local/etc/ansible/facts.d
+    filter: ansible_local
+
+# EOF

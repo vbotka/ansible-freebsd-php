@@ -1,39 +1,44 @@
 ---
 # handlers freebsd_php
 
-- name: enable and start php-fpm
+- name: Enable and start php-fpm
+  listen: enable and start php-fpm
   ansible.builtin.service:
     name: "{{ bsd_phpfpm_service }}"
     state: started
     enabled: true
 
-- name: disable and stop php-fpm
+- name: Disable and stop php-fpm
+  listen: disable and stop php-fpm
   ansible.builtin.service:
     name: "{{ bsd_phpfpm_service }}"
     state: stopped
     enabled: false
 
-- name: start php-fpm
+- name: Start php-fpm
+  listen: start php-fpm
   ansible.builtin.service:
     name: "{{ bsd_phpfpm_service }}"
     state: started
 
-- name: stop php-fpm
+- name: Stop php-fpm
+  listen: stop php-fpm
   ansible.builtin.service:
     name: "{{ bsd_phpfpm_service }}"
     state: stopped
 
-- name: restart php-fpm
+- name: Restart php-fpm
+  listen: restart php-fpm
   ansible.builtin.service:
     name: "{{ bsd_phpfpm_service }}"
     state: restarted
-  when: bsd_phpfpm_enable|bool
+  when: bsd_phpfpm_enable | bool
 
-- name: reload php-fpm
+- name: Reload php-fpm
+  listen: reload php-fpm
   ansible.builtin.service:
     name: "{{ bsd_phpfpm_service }}"
     state: reloaded
-  when: bsd_phpfpm_enable|bool
+  when: bsd_phpfpm_enable | bool
 
 # EOF
-...
