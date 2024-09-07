@@ -1,6 +1,6 @@
 ---
 # defaults freebsd_php
-bsd_php_role_version: 2.6.0
+bsd_php_role_version: 2.6.1
 
 bsd_php_pkg_install: false
 bsd_php_debug: false
